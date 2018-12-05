@@ -40,7 +40,7 @@ actions:
   - action: apt
     description: add extra packages
     packages: [
-      firmware-linux sudo
+      firmware-linux, sudo
     ]
 
   - action: run
