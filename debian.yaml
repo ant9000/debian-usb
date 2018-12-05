@@ -1,0 +1,77 @@
+{{- $arch     := or .arch     "amd64" -}}
+{{- $suite    := or .suite    "stable" -}}
+{{- $locale   := or .locale   "en_US" -}}
+{{- $user     := or .user     "user" -}}
+{{- $pass     := or .pass     "password" -}}
+{{- $hostname := or .hostname "debian" -}}
+{{- $image    := or .image    (printf "debian-%s-%s.img" $suite $arch) -}}
+
+architecture: {{ $arch }}
+
+actions:
+  - action: run
+    description: fix DNS inside container
+    script: /bin/ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf 
+
+  - action: debootstrap
+    description: create Debian filesystem
+    suite: {{ $suite }}
+    components:
+      - main
+      - contrib
+      - non-free
+    mirror: http://cdn.debian.net/debian/
+
+  - action: run
+    description: install laptop packages
+    chroot: true
+    command: apt install -y task-laptop
+
+  - action: run
+    description: install Xfce desktop
+    chroot: true
+    command: DEBIAN_FRONTEND=noninteractive apt install -y task-xfce-desktop
+
+  - action: run
+    description: install Italian localization
+    chroot: true
+    command: apt install -y task-italian task-italian-desktop
+
+  - action: apt
+    description: add extra packages
+    packages: [
+      firmware-linux
+    ]
+
+  - action: run
+    description: cleanup packages after install
+    chroot: true
+    command: apt clean
+
+  - action: run
+    description: set hostname
+    chroot: true
+    command: echo {{ $hostname }} > /etc/hostname
+
+  - action: run
+    description: set hosts file
+    chroot: true
+    script: scripts/setup-hosts.sh {{ $hostname }}
+
+  - action: run
+    description: set default locale
+    chroot: true
+    script: scripts/setup-locale.sh {{ $locale }}
+
+  - action: run
+    description: add a new user (will be in sudoers)
+    chroot: true
+    script: scripts/setup-user.sh {{ $user }} "{{ $pass }}"
+
+  - action: overlay
+    description: add customization overlay
+    source: overlays/customization/
+
+  - action: pack
+    file: {{ $image }}
+    compression: gz

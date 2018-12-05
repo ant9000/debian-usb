@@ -1,0 +1,6 @@
+gocode/*
+.*.swp
+*.img
+*.img.xz
+*.img.bmap
+*.tgz
