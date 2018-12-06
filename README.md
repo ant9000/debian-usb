@@ -19,6 +19,7 @@ Example run:
 
 ```
 $GOPATH/bin/debos --memory=4G debian.yaml
+$GOPATH/bin/debos --memory=4G grub.yaml
 ```
 
 CONFIGURATION
@@ -29,6 +30,7 @@ create an image for architecture i686 and targeting testing:
 
 ```
 $GOPATH/bin/debos --memory=4G -t arch:i686 -t suite:testing debian.yaml
+$GOPATH/bin/debos --memory=4G -t arch:i686 -t suite:testing grub.yaml
 ```
 
 Look at debian.yaml to see what's available.
