@@ -5,7 +5,8 @@ Install prerequisites:
 
 ```
 sudo apt install golang git libglib2.0-dev libostree-dev qemu-system-x86 \
-     qemu-user-static debootstrap systemd-container apt-cacher-ng
+     qemu-user-static debootstrap systemd-container apt-cacher-ng \
+     gdisk grub-pc-bin grub-efi-amd64-bin
 export GOPATH=`pwd`/gocode
 go get -u github.com/go-debos/debos/cmd/debos
 export http_proxy=http://<your LAN ip here>:3142

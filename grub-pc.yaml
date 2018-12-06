@@ -1,0 +1,58 @@
+{{- $arch     := or .arch   "amd64" -}}
+{{- $suite    := or .suite  "stable" -}}
+{{- $pack     := or .pack   (printf "debian-%s-%s.tgz" $suite $arch) -}}
+{{- $image    := or .image  (printf "debian-%s-%s.img" $suite $arch) -}}
+
+architecture: {{ $arch }}
+
+actions:
+  - action: unpack
+    file: {{ $pack }}
+    compression: gz
+
+  - action: run
+    description: fix DNS inside container
+    script: /bin/ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf 
+
+  - action: apt
+    recommends: true
+    description: add grub-pc
+    packages: [ grub-pc ]
+
+  - action: run
+    description: cleanup packages after install
+    chroot: true
+    command: apt clean
+
+  - action: image-partition
+    description: create bootable image
+    imagename: {{ $image }}
+    imagesize: 4GB
+    partitiontype: msdos
+    mountpoints:
+      - mountpoint: /
+        partition: rootfs
+        options: [ noatime ]
+    partitions:
+      - name: rootfs
+        fs: ext4
+        start: 1M
+        end: 100%
+        flags: [ boot ]
+
+  - action: filesystem-deploy
+    description: deploying filesystem onto image
+
+  - action: run
+    description: setup GRUB
+    script: scripts/grub-pc.sh
+
+# - action: run
+#   description: obtain a bitmap file for faster flashing
+#   postprocess: true
+#   command: bmaptool create {{ $image }} -o {{ $image }}.bmap
+
+# - action: run
+#   description: compress the image
+#   postprocess: true
+#   command: xz -f {{ $image }}

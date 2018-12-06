@@ -26,7 +26,7 @@ actions:
   - action: apt
     recommends: true
     description: add extra packages
-    packages: [ firmware-linux, sudo, task-laptop, task-xfce-desktop, task-italian, task-italian-desktop ]
+    packages: [ linux-image-amd64, firmware-linux, sudo, task-laptop, task-xfce-desktop, task-italian, task-italian-desktop ]
 
   - action: run
     description: cleanup packages after install
