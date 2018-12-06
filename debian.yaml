@@ -1,10 +1,9 @@
 {{- $arch     := or .arch     "amd64" -}}
 {{- $suite    := or .suite    "stable" -}}
-{{- $locale   := or .locale   "en_US" -}}
 {{- $user     := or .user     "user" -}}
 {{- $pass     := or .pass     "password" -}}
 {{- $hostname := or .hostname "debian" -}}
-{{- $image    := or .image    (printf "debian-%s-%s.img" $suite $arch) -}}
+{{- $image    := or .image    (printf "debian-%s-%s.tgz" $suite $arch) -}}
 
 architecture: {{ $arch }}
 
@@ -16,32 +15,18 @@ actions:
   - action: debootstrap
     description: create Debian filesystem
     suite: {{ $suite }}
-    components:
-      - main
-      - contrib
-      - non-free
+    components: [ main, contrib, non-free ]
     mirror: http://cdn.debian.net/debian/
 
   - action: run
-    description: install laptop packages
+    description: preseed variables
     chroot: true
-    command: apt install -y task-laptop
-
-  - action: run
-    description: install Xfce desktop
-    chroot: true
-    command: DEBIAN_FRONTEND=noninteractive apt install -y task-xfce-desktop
-
-  - action: run
-    description: install Italian localization
-    chroot: true
-    command: apt install -y task-italian task-italian-desktop
+    script: scripts/preseed.sh
 
   - action: apt
+    recommends: true
     description: add extra packages
-    packages: [
-      firmware-linux, sudo
-    ]
+    packages: [ firmware-linux, sudo, task-laptop, task-xfce-desktop, task-italian, task-italian-desktop ]
 
   - action: run
     description: cleanup packages after install
@@ -57,11 +42,6 @@ actions:
     description: set hosts file
     chroot: true
     script: scripts/setup-hosts.sh {{ $hostname }}
-
-  - action: run
-    description: set default locale
-    chroot: true
-    script: scripts/setup-locale.sh {{ $locale }}
 
   - action: run
     description: add a new user (will be in sudoers)
