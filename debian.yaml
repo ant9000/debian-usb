@@ -25,8 +25,17 @@ actions:
 
   - action: apt
     recommends: true
-    description: add extra packages
-    packages: [ linux-image-amd64, firmware-linux, sudo, task-laptop, task-xfce-desktop, task-italian, task-italian-desktop ]
+    description: add kernel and firmware
+    packages: [
+        linux-image-amd64, firmware-linux, atmel-firmware, bluez-firmware, firmware-atheros, firmware-bnx2,
+        firmware-brcm80211, firmware-intelwimax, firmware-iwlwifi, firmware-libertas, firmware-realtek,
+        firmware-ti-connectivity, firmware-zd1211
+    ]
+
+  - action: apt
+    recommends: true
+    description: add Xfce desktop with Italian locale
+    packages: [ sudo, task-laptop, task-xfce-desktop, task-italian, task-italian-desktop ]
 
   - action: run
     description: cleanup packages after install
