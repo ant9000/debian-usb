@@ -19,10 +19,19 @@ actions:
     description: add GRUB
     packages: [ grub-pc, grub-efi-amd64-bin ]
 
+  - action: apt
+    recommends: true
+    description: automagically grows root partition to max extent possible
+    packages: [ cloud-initramfs-growroot ]
+
   - action: run
     description: cleanup packages after install
     chroot: true
     command: apt clean
+
+  - action: overlay
+    description: resize root filesystem at boot
+    source: overlays/resize2fs/
 
   - action: image-partition
     description: create bootable image
