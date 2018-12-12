@@ -35,7 +35,7 @@ actions:
   - action: apt
     recommends: true
     description: add Xfce desktop with Italian locale
-    packages: [ sudo, task-laptop, task-xfce-desktop, task-italian, task-italian-desktop ]
+    packages: [ sudo, task-laptop, task-xfce-desktop, task-italian, task-italian-desktop, network-manager-openvpn ]
 
   - action: run
     description: cleanup packages after install
