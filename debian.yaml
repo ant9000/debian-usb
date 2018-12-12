@@ -57,10 +57,6 @@ actions:
     chroot: true
     script: scripts/setup-user.sh {{ $user }} "{{ $pass }}"
 
-  - action: overlay
-    description: add customization overlay
-    source: overlays/customization/
-
   - action: pack
     file: {{ $image }}
     compression: gz

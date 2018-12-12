@@ -33,6 +33,10 @@ actions:
     description: resize root filesystem at boot
     source: overlays/resize2fs/
 
+  - action: overlay
+    description: add customization overlay
+    source: overlays/customization/
+
   - action: image-partition
     description: create bootable image
     imagename: {{ $image }}
