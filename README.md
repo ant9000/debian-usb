@@ -22,6 +22,12 @@ $GOPATH/bin/debos --memory=4G debian.yaml
 $GOPATH/bin/debos --memory=4G grub.yaml
 ```
 
+The two steps above will produce a complete image that can be dd'ed to an USB pendrive, with
+
+```
+sudo dd if=debian-stable-amd64.img of=<USB block device name here> bs=64k status=progress
+```
+
 CONFIGURATION
 -------------
 
