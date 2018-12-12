@@ -4,3 +4,5 @@ gocode/*
 *.img.xz
 *.img.bmap
 *.tgz
+/overlays/customization/*
+!/overlays/customization/.keep
