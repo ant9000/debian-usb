@@ -5,11 +5,10 @@ Install prerequisites:
 
 ```
 sudo apt install golang git libglib2.0-dev libostree-dev qemu-system-x86 \
-     qemu-user-static debootstrap systemd-container apt-cacher-ng \
+     qemu-user-static debootstrap systemd-container \
      gdisk grub-pc-bin grub-efi-amd64-bin
 export GOPATH=`pwd`/gocode
 go get -u github.com/go-debos/debos/cmd/debos
-export http_proxy=http://<your LAN ip here>:3142
 ```
 
 USAGE
@@ -41,6 +40,20 @@ $GOPATH/bin/debos --memory=4G -t arch:i686 -t suite:testing grub.yaml
 
 Look at debian.yaml to see what's available.
 
+CACHING
+-------
+
+Downloading deb packages over and over is time consuming. You can setup a local cache and
+use it as a proxy, like this:
+
+```
+sudo apt install apt-cacher-ng
+export http_proxy=http://<your LAN IP here>:3142
+```
+
+Subsequent builds will reuse local packages. Note that you really need to use your LAN IP,
+localhost will not work. Also, be aware that apt-cacher-ng will be accessible from outside
+your machine unless you firewall it.
 
 LINKS
 -----
