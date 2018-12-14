@@ -33,9 +33,9 @@ actions:
     description: resize root filesystem at boot
     source: overlays/resize2fs/
 
-  - action: overlay
+  - action: run
     description: add customization overlay
-    source: overlays/customization/
+    script: scripts/customization.sh
 
   - action: image-partition
     description: create bootable image
